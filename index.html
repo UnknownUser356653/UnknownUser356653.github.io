@@ -1,14 +1,18 @@
 <script>
 function playScream() {
   const audio = new Audio("scream.mp3");
-  audio.volume = 1.0; // Max volume
-  audio.play().catch(()=>{}); // Try autoplay, catch block avoids errors
-  document.removeEventListener('click', playScream);
-  document.getElementById('tap').style.display = 'none';
+  audio.volume = 1.0;
+  audio.load();
+  audio.play().catch(err => {
+    console.log("Play failed:", err);
+    document.getElementById('tap').innerText = "Tap again to play scream";
+  });
 }
 
 window.addEventListener('load', () => {
+  // Try once on load
   playScream();
-  document.addEventListener('click', playScream); // Fallback if autoplay blocked
+  // Fallback: allow manual tap
+  document.addEventListener('click', playScream, { once: true });
 });
 </script>
