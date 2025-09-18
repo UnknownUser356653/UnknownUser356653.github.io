@@ -1,0 +1,27 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  html,body{height:100%;margin:0;background:#000;color:#fff;display:flex;
+    align-items:center;justify-content:center;font-family:Arial,Helvetica,sans-serif}
+  #msg{font-size:12vw;text-align:center}
+  #tap{position:absolute;bottom:6vh;font-size:3.2vw;opacity:.7}
+</style>
+<div id="msg">BOO!</div>
+<div id="tap">Tap anywhere if you don't hear a sound</div>
+<script>
+  function playBeep(){
+    try{
+      let c=new (window.AudioContext||window.webkitAudioContext)();
+      let o=c.createOscillator(); o.type='sine'; o.frequency.value=880;
+      let g=c.createGain(); g.gain.value=0.2;
+      o.connect(g); g.connect(c.destination); o.start(); setTimeout(()=>o.stop(),160);
+    }catch(e){}
+    document.removeEventListener('click', playBeep);
+    document.getElementById('tap').style.display='none';
+  }
+  // Try autoplay; if blocked, user can tap to trigger
+  window.addEventListener('load', ()=>{
+    try{ playBeep(); }catch(e){}
+    document.addEventListener('click', playBeep);
+  });
+</script>
